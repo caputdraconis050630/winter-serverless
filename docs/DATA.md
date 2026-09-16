@@ -39,5 +39,7 @@ fixed-policy replay commands.
 
 `MANIFEST-code.sha256` covers the code release. `MANIFEST-data.sha256` covers
 every companion payload file. `data-inventory.json` identifies the data file
-sizes and hashes without machine-specific source paths. Scientific provenance
-inside the original experiment manifests is preserved unchanged.
+sizes, hashes and inclusion reasons without machine-specific source paths.
+Measurement-time provenance is retained. The six corrected final drift
+descriptions have an explicit original-to-release hash ledger; see
+`REPRODUCTION.md`. `docs/SCOPE.md` explains the selected artifact boundaries.

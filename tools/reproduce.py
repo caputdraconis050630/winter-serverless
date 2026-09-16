@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import release_metadata
 
 ROOT = Path(__file__).resolve().parents[1]
 PAPER = ROOT / 'winter-paper'
@@ -91,6 +92,7 @@ def verify(statistics=False):
     destination = output_directory('verify')
     expected = json.loads((RESULTS / 'verification/report.json').read_text())
     assert expected['status'] == 'passed' and expected['ewma_alpha'] == .3
+    corrected_hashes = release_metadata.verify(ROOT, expected)
     cases = expected['expected_cases']; assert len(cases) == 19
     for name in cases:
         directory = RESULTS / 'cases' / name
@@ -102,7 +104,10 @@ def verify(statistics=False):
             assert sha(directory / record['file']) == record['sha256'], (name, action)
             assert not action.startswith(('EWMA_0.1', 'EWMA_0.5', 'WINTER_frozen'))
         for filename, digest in expected['cases'][name]['source_sha256'].items():
+            digest = corrected_hashes.get((name, filename), digest)
             assert sha(directory / filename) == digest, (name, filename)
+        contract = json.loads((directory / 'execution.json').read_text())
+        assert sha(directory / 'case.json') == contract['case_sha256'], name
         print('Frozen inputs and policy arrays verified:', name, flush=True)
     analysis_script('table_review.py', destination)
     tables = json.loads((destination / 'table_checks.json').read_text())
@@ -114,6 +119,7 @@ def verify(statistics=False):
         if numerical['status'] != 'passed':
             raise SystemExit('Numerical verification failed; see ' + str(destination / 'numerical_checks.json'))
     report = dict(status='passed', cases=len(cases), ewma_alpha=.3,
+                  drift_metadata_corrections_verified=6,
                   input_and_action_hashes='passed', tables='passed',
                   independent_statistics='passed' if statistics else 'not requested',
                   simulation_rerun=False)
@@ -177,7 +183,12 @@ def figures():
     destination = output_directory('figures')
     shutil.copytree(PAPER, destination / 'winter-paper', ignore=shutil.ignore_patterns('__pycache__', 'build-*'))
     (destination / 'serverless-fewshot').symlink_to(EXP, target_is_directory=True)
+    (destination / 'winter-paper/audit/final_revision_2026-09-16').mkdir(parents=True, exist_ok=True)
+    retained_tables = {p.name for p in (PAPER / 'generated').glob('*.tex')}
     subprocess.run([sys.executable, 'audit/build_lstm_revision.py'], cwd=destination / 'winter-paper', check=True)
+    for path in (destination / 'winter-paper/generated').glob('*.tex'):
+        if path.name not in retained_tables:
+            path.unlink()
     print('Regenerated figures and tables:', destination / 'winter-paper', flush=True)
 
 

@@ -24,8 +24,11 @@ no-age-hand-off control preserves the gate's prototype/low-count routes and
 removes only its mature-age switch; it is not identical to ungated WINTER.
 Both branches remain maintained in the evaluated gated implementation.
 
-Historical experiments remain in the code and source-data archive because
-later measurements depend on their checkpoints, inputs or invariant results.
-They are not additional proposed methods in the submitted paper. In particular,
-older scheduled drift and non-0.3 EWMA measurements are not final comparison
-arms. The final `fixed_ewma_v1/cases/*/case.json` files define the included arms.
+Source checkpoints, shared inputs, recorded simulator versions and invariant
+measurements needed by the final campaign are retained. The final
+`fixed_ewma_v1/cases/*/case.json` files define the comparison arms. Some immutable
+source arrays also contain older scheduled drift and non-0.3 EWMA results;
+these are not extracted into final comparisons. Unused follow-up campaigns,
+including R30–R33 and onboarding-symmetric experiments, are excluded.
+The scope and metadata correction are documented in `SCOPE.md` and
+`REPRODUCTION.md`.

@@ -18,7 +18,7 @@ The DOI files are prepared separately for publication after final confirmation.
 
 ## Version and experiment scope
 
-Release version: **2026.09.16**, corresponding to reviewed manuscript build
+Release version: **2026.09.16.1**, corresponding to reviewed manuscript build
 `run-c555y8ho`.
 
 The new-observation EWMA weight is fixed at **α = 0.3** in every evaluated
@@ -83,8 +83,9 @@ fresh replay into a new directory. See [reproduction instructions](docs/REPRODUC
 The authoritative current result directory, after restoring the data, is
 `serverless-fewshot/results/fixed_ewma_v1/`. Other result directories preserve
 source measurements and attribution controls; their results must not be pooled
-with the final campaign. Older experimental scripts remain for provenance.
-Use the root-level instructions for this release.
+with the final campaign. Shared source modules and recorded simulator versions
+are retained where the current measurements depend on them. Unused experiments
+and paper assets are excluded. See [release scope](docs/SCOPE.md).
 
 ## Citation and licenses
 

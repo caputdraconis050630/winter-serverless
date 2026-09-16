@@ -36,12 +36,11 @@ serverless-fewshot/results/lstm_comparison_v1/
 serverless-fewshot/results/winter_drift_v1/
 serverless-fewshot/results/winter_g_drift_v1/
 serverless-fewshot/results/onboarding_attribution_v1/
-serverless-fewshot/results/onboarding_symmetric_v2/
 serverless-fewshot/results/runs/
-serverless-fewshot/results/tables/
 serverless-fewshot/results_azure2021/
 winter-paper/
 submission/
+provenance/
 ```
 
 `fixed_ewma_v1/cases/` is the final 19-condition dataset. Its `case.json`
@@ -73,6 +72,25 @@ create and remove experiment services and require a configured test cluster;
 the verifier does not invoke them. The archive preserves the actual request,
 readiness, response and predictor-timing records for the reported measurements.
 
-The original campaign orchestration scripts include local machine paths and
-historical workflow instructions. Consult `IMPLEMENTATION.md` before adapting
-those workflows to a new machine. Use new output directories for new experiments.
+Retained source campaign scripts include local machine paths. Consult
+`IMPLEMENTATION.md` before adapting them to a new machine. Use new output
+directories for new experiments. The supported release commands use relative
+paths and the selected data inventory.
+
+## Corrected release metadata
+
+Six final drift `case.json` descriptions inherited the source campaign's older
+scheduled/frozen adapter labels. The release descriptions now identify the
+onboarding update used by the actual WINTER and WINTER-G action arrays. The
+enclosing `execution.json` case hashes are updated accordingly. All measured
+arrays, action schedules, summaries and measurement-time verification reports
+retain their original bytes.
+
+`provenance/metadata-corrections.json` maps original and release hashes. The
+twelve original case/contract files are retained under
+`provenance/metadata-before-correction/`. `verify` checks the exact permitted
+description changes, the original report hashes and the new case hashes before
+checking the outcomes. Historical source/replay contracts remain unchanged;
+their policy arrays and action-level source links identify the measured methods.
+`tools/release_metadata.py` records and verifies this export correction; it is
+idempotent on the corrected release. Original measurement code is preserved.
