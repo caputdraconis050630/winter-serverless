@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "Please cite the associated manuscript when using this code or data."
+title: "WINTER: Adaptive Serverless Prewarming with Limited Invocation History — reproducibility artifact"
+type: software
+version: "2026.09.16"
+license: MIT
+repository-code: "https://github.com/caputdraconis050630/winter-serverless"
+authors:
+  - family-names: Kim
+    given-names: Guntak
+    affiliation: "Inha University"
+  - family-names: Jung
+    given-names: JaeHong
+    affiliation: "Inha University"
+    email: jjh1126@inha.edu
+  - family-names: Kwon
+    given-names: Gu-In
+    affiliation: "Inha University"
+keywords:
+  - serverless computing
+  - cold starts
+  - prewarming
+  - limited invocation history
+  - cross-function transfer
+preferred-citation:
+  type: article
+  title: "WINTER: Adaptive Serverless Prewarming with Limited Invocation History"
+  authors:
+    - family-names: Kim
+      given-names: Guntak
+    - family-names: Jung
+      given-names: JaeHong
+      affiliation: "Inha University"
+      email: jjh1126@inha.edu
+    - family-names: Kwon
+      given-names: Gu-In
+  year: 2026
+  notes: "Submission manuscript prepared for Future Generation Computer Systems; no publication DOI assigned here."

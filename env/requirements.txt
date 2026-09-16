@@ -1,0 +1,15 @@
+# Python 3.13; versions read from the final verification environment.
+# The measured GPU wheel is torch 2.10.0+cu128. CPU verification works with
+# torch 2.10.0; select the platform wheel from the official PyTorch installer.
+numpy==2.4.6
+numba==0.66.0
+llvmlite==0.48.0
+torch==2.10.0
+pandas==3.0.3
+scipy==1.18.0
+scikit-learn==1.8.0
+matplotlib==3.10.8
+PyMuPDF==1.27.2
+PyYAML==6.0.3
+# Optional preprocessing/full training dependencies are declared separately in
+# serverless-fewshot/pyproject.toml; they are not needed by the portable verifier.

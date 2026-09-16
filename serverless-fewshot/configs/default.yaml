@@ -1,0 +1,107 @@
+seed: 0
+seeds: [0, 1, 2, 3, 4]
+deterministic: true
+device: cuda
+
+paths:
+  raw: ${hydra:runtime.cwd}/data/raw
+  processed: ${hydra:runtime.cwd}/data/processed
+  results: ${hydra:runtime.cwd}/results
+
+data:
+  dataset: azure2019  # azure2019, azure2021, huawei
+  granularity_min: 1
+  min_invocations: 100  # active pool threshold
+  max_functions: 50000  # stratified sample cap
+  frequency_buckets:
+    - [0, 0.000694]       # <1/day (1/1440)
+    - [0.000694, 0.01667]  # 1/day - 1/h
+    - [0.01667, 1.0]       # 1/h - 1/min
+    - [1.0, 1e9]           # >1/min
+
+features:
+  context_len: 60         # L = 60 minutes
+  horizons: [1, 5, 15]    # prediction horizons in minutes
+  quantiles: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]
+  rolling_windows: [15, 60]
+
+splits:
+  s1:  # random hold-out
+    train_frac: 0.7
+    val_frac: 0.1
+    test_frac: 0.2
+  s2:  # cluster hold-out
+    n_clusters: 12
+    holdout_clusters: 3
+  s3:  # temporal split
+    train_days: 10
+    test_days: 4
+
+model:
+  body: tcn  # tcn, gru, patchtst
+  embedding_dim: 64
+  tcn:
+    n_blocks: 5
+    channels: 64
+    kernel_size: 3
+  gru:
+    n_layers: 2
+    hidden_size: 128
+  patchtst:
+    patch_size: 8
+    d_model: 128
+    n_heads: 4
+    n_layers: 3
+
+head:
+  type: ridge  # ridge, anil_gd, bayesian, full
+  ridge_lambda_init: 1.0
+  gd_inner_steps: 5
+  gd_inner_lr: 0.01
+
+meta:
+  batch_size: 64       # B = 64 tasks per episode
+  k_support: [5, 10, 20]
+  k_query: 32
+  outer_lr: 3e-4
+  outer_steps: 40000
+  weight_decay: 0.01
+  grad_clip: 1.0
+  amp: true            # bf16 mixed precision
+  early_stop_patience: 500
+
+prototype:
+  enabled: true
+  k_clusters: 16
+  biased_ridge: true
+
+decision:
+  cost_ratios: [0.1, 0.25, 0.5, 1.0, 2.0, 5.0, 10.0, 25.0, 100.0]  # c_u/c_o
+  concurrency_method: mginf  # mginf or montecarlo
+
+drift:
+  trigger: conformal  # periodic, conformal, adwin, page_hinkley
+  conformal_alpha: 0.1
+  conformal_delta: 0.15
+  conformal_m: 3
+  periodic_hours: 6
+  pelt_penalty: auto
+
+sim:
+  tick_seconds: 60
+  cold_init_latency:
+    node: [0.4, 1.5]    # lognormal range
+    python: [0.5, 2.0]
+    java: [2.0, 6.0]
+  default_memory_mb: 256
+  scalability_ns: [1000, 10000, 50000, 100000]
+
+hpo:
+  n_trials: 40
+  pruner: asha
+  budget_fraction: 0.15
+
+wandb:
+  project: serverless-fewshot
+  entity: null
+  mode: offline  # offline for now

@@ -1,0 +1,18 @@
+# Data and generated-asset license
+
+The authors' measurement outputs, checkpoints, derived tables and generated
+figures are licensed under Creative Commons Attribution 4.0 International:
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+Copyright 2026 Guntak Kim and Gu-In Kwon, Inha University.
+Cite: Guntak Kim, Jung JaeHong and Gu-In Kwon. WINTER: Adaptive Serverless Prewarming with
+Limited Invocation History. Submission manuscript, 2026. See CITATION.cff.
+
+This applies to the authors' contributions in serverless-fewshot/results/,
+serverless-fewshot/results_azure2021/, and generated measurements/figures/tables
+in winter-paper/. Derived trace arrays in data/processed/ and case data.npz
+retain Microsoft/Huawei attribution and upstream CC BY 4.0 terms. See
+docs/DATA.md and THIRD_PARTY.md for the original sources and transformations.
+The paper sources/PDF are included as the authors' submission manuscript;
+this file does not grant rights to third-party journal templates or quoted
+material. Author-written software is separately MIT licensed.

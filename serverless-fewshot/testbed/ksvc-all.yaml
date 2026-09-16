@@ -1,0 +1,71 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: python-ml
+  namespace: serverless-test
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "0"
+        autoscaling.knative.dev/max-scale: "3"
+        autoscaling.knative.dev/target: "1"
+    spec:
+      containers:
+        - image: dev.local/testbed-python-ml:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 512Mi
+            limits:
+              memory: 512Mi
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: node-api-real
+  namespace: serverless-test
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "0"
+        autoscaling.knative.dev/max-scale: "3"
+        autoscaling.knative.dev/target: "1"
+    spec:
+      containers:
+        - image: dev.local/testbed-node-api:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 128Mi
+            limits:
+              memory: 128Mi
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: java-svc
+  namespace: serverless-test
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "0"
+        autoscaling.knative.dev/max-scale: "3"
+        autoscaling.knative.dev/target: "1"
+    spec:
+      containers:
+        - image: dev.local/testbed-java-svc:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 512Mi
+            limits:
+              memory: 512Mi
