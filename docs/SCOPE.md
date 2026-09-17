@@ -1,9 +1,10 @@
 # Artifact scope
 
-Version `2026.09.16.1` contains the reviewed manuscript (`run-c555y8ho`), its
+Version `2026.09.17` contains the reviewed manuscript (`run-uugt7foz`), its
 reported measurements and the code/data needed to inspect and reproduce them.
-The paper text, numerical outcomes and submission PDFs are unchanged from
-version `2026.09.16`.
+The measured outcomes, figures and tables are unchanged from version
+`2026.09.16.1`. This release updates the manuscript build after removal of the
+AI-assistance declaration and its separate submission files.
 
 | Included component | Role |
 |---|---|

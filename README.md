@@ -18,8 +18,8 @@ The DOI files are prepared separately for publication after final confirmation.
 
 ## Version and experiment scope
 
-Release version: **2026.09.16.1**, corresponding to reviewed manuscript build
-`run-c555y8ho`.
+Release version: **2026.09.17**, corresponding to reviewed manuscript build
+`run-uugt7foz`.
 
 The new-observation EWMA weight is fixed at **α = 0.3** in every evaluated
 component. The current campaign covers three initial cohorts, one continuous
@@ -54,7 +54,7 @@ archive next to an existing clone named `winter-serverless`.
 
 ```bash
 # Run from the directory containing the repository.
-tar -xzf winter-data-20260916.tar.gz
+tar -xzf winter-data-20260917.tar.gz
 cd winter-serverless
 python tools/reproduce.py checksums --data
 python tools/reproduce.py verify --statistics
