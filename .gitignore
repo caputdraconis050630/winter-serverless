@@ -14,9 +14,11 @@ __pycache__/
 /data-inventory.json
 /artifact-scope.json
 /provenance/
+/validation/
 /release-validation.json
 /winter-paper/*
 !/winter-paper/*.py
+/winter-paper/build.py
 !/winter-paper/audit/
 /winter-paper/audit/*
 !/winter-paper/audit/*.py

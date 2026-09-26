@@ -2,7 +2,7 @@
 
 The companion results archive is on
 [Zenodo, DOI 10.5281/zenodo.21754571](https://doi.org/10.5281/zenodo.21754571),
-separately from GitHub code. Repository version `2026.09.26` uses the unchanged
+separately from GitHub code. The `2026.09.26` code/data archives use the unchanged
 `2026.09.17` experimental snapshot for the IEEE Access manuscript.
 The final experimental record is `results/fixed_ewma_v1/`, with EWMA's
 new-observation weight fixed to 0.3 throughout. The other included campaigns
@@ -11,8 +11,8 @@ control-study dependencies of that record.
 
 The archive includes fixed cohort arrays, action schedules, source checkpoints,
 per-function/per-seed ledgers, aggregate outcomes, paired statistics, live
-request records, table/figure data, and the archived paper from that snapshot.
-The current manuscript source package is `ieee-access-20260922`; see
+request records, table/figure data, and the current IEEE Access manuscript.
+Its source package is `ieee-access-20260922`, restored under `submission/`; see
 [manuscript build instructions](REPRODUCTION.md#manuscript-build).
 The archive materializes workspace symlinks as ordinary files. Temporary checkpoints, caches, Python
 environments, raw provider archives, and earlier paper build directories are

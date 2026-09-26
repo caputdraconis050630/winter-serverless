@@ -11,10 +11,13 @@ The experiment code and measured outcomes retain the `2026.09.17` snapshot.
 All ten figure PDFs, twenty generated table fragments, and the bibliography in
 the IEEE Access package match that snapshot. The companion research artifact
 is identified by [Zenodo DOI 10.5281/zenodo.21754571](https://doi.org/10.5281/zenodo.21754571).
-The archived `submission/` tree preserves the earlier manuscript build;
-use the complete IEEE Access package with `paper --source` to build the current
-submission. The code repository contains the build entry point and instructions;
-manuscript assets and experimental data are distributed separately.
+The `2026.09.26` data archive restores the current IEEE Access source package
+and its supplied PDFs under `submission/`. The PDF author metadata is corrected
+to identify the three human authors, preserving all supplied page contents.
+The canonical `winter-paper/` sources are derived from the same package for
+numerical auditing and figure regeneration. The code repository contains the
+build entry point and instructions; manuscript assets and experimental data
+are distributed in the companion archive.
 
 | Included component | Role |
 |---|---|
@@ -24,10 +27,11 @@ manuscript assets and experimental data are distributed separately.
 | Onboarding-attribution cohorts, models and source ledgers | Source of shared cohorts, prototypes, representation controls and reused outcomes |
 | Selected `results/runs/` records | Shared fixed inputs, source policy schedules, Chronos forecasts, prior alpha selection and latency calibration |
 | Source preprocessing/training code, selected checkpoints and processed Azure-2021 data | Reconstructing the learned predictors and selected inputs |
-| Archived paper sources and evidence inputs | Ten referenced figures and twenty referenced generated table fragments |
-| `submission/` in the `2026.09.17` data archive | Preserved manuscript sources, reviewed PDFs and submission support documents from that snapshot |
-| `ieee-access-20260922/` source package | Current IEEE Access manuscript, supplement, author images, class/font assets and `build.py`; supplied to `paper --source` |
-| `provenance/` | Twelve original metadata files and the exact six-case description correction ledger |
+| Current paper sources and evidence inputs | Ten referenced figures and twenty referenced generated table fragments |
+| `submission/` in the current data archive | Complete IEEE Access manuscript, supplement, author images, class/font assets and `build.py` |
+| Standalone manuscript ZIP | The same source package under `ieee-access-20260922/`, also usable with `paper --source` |
+| `provenance/` | Original measurement metadata, the six-case correction ledger, and manuscript source/metadata correspondence |
+| `validation/` | Fresh artifact checks and their precise scope |
 
 Separate R30–R33 campaigns, the onboarding-symmetric study, unreferenced paper
 figures/tables, unused model variants and unrelated historical result trees

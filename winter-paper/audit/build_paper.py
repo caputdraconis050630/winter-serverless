@@ -8,6 +8,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import build_winter_g_evidence
 
@@ -21,6 +22,10 @@ def sha(path):
 def build(build_dir):
     if build_dir.parent != ROOT:
         raise ValueError("Build directory must be a direct child of the paper directory")
+    if r"\documentclass{ieeeaccess}" in (ROOT / "main.tex").read_text():
+        subprocess.run([sys.executable, str(ROOT.parent / "tools/reproduce.py"),
+                        "paper", "--source", str(ROOT)], check=True)
+        return
     gate = build_winter_g_evidence.verify()
     gate_manifest_hash = sha(build_winter_g_evidence.MANIFEST)
     original_verification = ROOT / "audit/lstm_comparison/verification.json"

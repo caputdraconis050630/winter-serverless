@@ -14,26 +14,29 @@ point sets these defaults when they are absent.
 | `python tools/reproduce.py checksums --data` | Verify every restored code/data file against the release manifests |
 | `python tools/reproduce.py verify` | Verify all 19 final cohort/action sets and every included generated table |
 | `python tools/reproduce.py verify --statistics` | Also reaggregate outcomes, recompute 3,666 paired contrasts and their cluster intervals, and check control/live/timing records |
-| `python tools/reproduce.py paper --source /path/to/ieee-access-20260922` | Build the current IEEE Access main text and supplement in a new `.repro-output/paper-*` directory |
+| `python tools/reproduce.py paper` | Build the restored IEEE Access main text and supplement in a new `.repro-output/paper-*` directory |
 | `python tools/reproduce.py figures` | Regenerate current figures/tables in a new copy of the paper directory |
 | `python tools/reproduce.py replay --case initial_azure_primary --workers 4 --output /path/to/new-replay` | Execute the complete fixed policy arrays on regenerated common request streams, writing new results |
 
 `checksums --data`, `verify`, `verify --statistics`, `figures`, and `replay`
 require the companion data archive from
-[Zenodo](https://doi.org/10.5281/zenodo.21754571). The `2026.09.17` experimental
-snapshot remains compatible with repository version `2026.09.26`.
-The manuscript build requires the separate source package, Python 3,
+[Zenodo](https://doi.org/10.5281/zenodo.21754571). Use
+`winter-data-ieee-access-20260926.tar.gz` with the matching code ZIP or GitHub
+snapshot. It preserves the `2026.09.17` experimental files and supplies the
+current manuscript under `submission/`.
+The manuscript build requires that restored source package, Python 3,
 `pdflatex`, `bibtex`, and the standard packages of TeX Live. Its journal class,
 bibliography style, fonts, and logos retain their own licenses.
 
 ## Manuscript build
 
-The current submission source is the complete `ieee-access-20260922` package.
+The current submission source is the complete `ieee-access-20260922` package,
+restored under `submission/` by the current data archive.
 Keep `authors/`, the figures, generated tables, class/style files, font files
 (`.pfb`, `.tfm`, `.map`, `.fd`), and `build.py` together. Run:
 
 ```bash
-python tools/reproduce.py paper --source /path/to/ieee-access-20260922
+python tools/reproduce.py paper
 ```
 
 The entry point copies the package to a fresh `.repro-output/paper-*` directory
@@ -45,11 +48,16 @@ pagination can vary with the TeX installation. The local validation on
 2026-09-26 produced 13 and 17 pages, with no unresolved references, citations,
 or missing-character errors.
 
-The original `2026.09.17` data archive contains the earlier manuscript under
-`submission/`. `python tools/reproduce.py paper` still builds those restored
-sources, including their archived highlights, for reproducibility. The build
-report identifies that format as `archived-cas`. To build the current IEEE
-Access submission, pass the current source package using `--source`.
+The standalone `winter-manuscript-ieee-access-20260926.zip` contains the same
+source package under `ieee-access-20260922/`. It can be built using
+`python tools/reproduce.py paper --source /path/to/ieee-access-20260922`.
+The manuscript PDFs and corresponding LaTeX `pdfauthor` fields name the three
+human authors. This metadata correction preserves all 31 supplied pages;
+the manuscript's AI-assistance acknowledgment remains part of its text.
+
+The old `2026.09.17` data archive remains usable with these tools for historical
+reproduction. Its earlier document format is identified as `archived-cas` in
+`build.json`; it is superseded by the current IEEE Access manuscript package.
 
 ## Data layout
 
@@ -67,6 +75,7 @@ serverless-fewshot/results_azure2021/
 winter-paper/
 submission/
 provenance/
+validation/
 ```
 
 `fixed_ewma_v1/cases/` is the final 19-condition dataset. Its `case.json`

@@ -24,8 +24,10 @@ submission manuscript.
 
 Repository version: **2026.09.26**, aligned with the IEEE Access manuscript
 package `ieee-access-20260922` (main text: 13 pages; supplement: 18 pages).
-The experimental snapshot remains **2026.09.17**. The journal-format and
-documentation update retains the measured results and experiment code.
+The experimental snapshot remains **2026.09.17**. The `2026.09.26` artifact
+packages those measurements with the complete IEEE Access sources and PDFs.
+PDF author metadata identifies Guntak Kim, Jaehong Jung, and Gu-In Kwon;
+the supplied page content is preserved.
 
 The new-observation EWMA weight is fixed at **α = 0.3** in every evaluated
 component. The current campaign covers three initial cohorts, one continuous
@@ -55,14 +57,15 @@ Additional preprocessing and training dependencies are declared in
 ## Restore the companion data
 
 Obtain the companion data TAR.GZ from the
-[Zenodo record](https://doi.org/10.5281/zenodo.21754571). The `2026.09.17`
-experimental snapshot is compatible with this repository version. Its archive
-contains a top-level `winter-serverless/` directory; extract it next to an
-existing clone named `winter-serverless`.
+[Zenodo record](https://doi.org/10.5281/zenodo.21754571). The current files are
+`winter-code-ieee-access-20260926.zip` and
+`winter-data-ieee-access-20260926.tar.gz`. Both contain a top-level
+`winter-serverless/` directory. Extract them into the same parent directory,
+or extract the data archive next to an existing clone named `winter-serverless`.
 
 ```bash
 # Run from the directory containing the repository.
-tar -xzf winter-data-20260917.tar.gz
+tar -xzf winter-data-ieee-access-20260926.tar.gz
 cd winter-serverless
 python tools/reproduce.py checksums --data
 python tools/reproduce.py verify --statistics
@@ -74,19 +77,20 @@ fresh replay into a new directory. See [reproduction instructions](docs/REPRODUC
 
 ## Build the IEEE Access manuscript
 
-Use the complete `ieee-access-20260922` source package, including `authors/`,
-the class and font files, figures, and `build.py`:
+The current data archive restores the complete `ieee-access-20260922` source
+package under `submission/`, including `authors/`, the class and font files,
+figures, and `build.py`:
 
 ```bash
-python tools/reproduce.py paper --source /path/to/ieee-access-20260922
+python tools/reproduce.py paper
 ```
 
 The command builds a copy under `.repro-output/paper-*`, refreshes cross-document
 references, and produces `main.pdf`, `supplementary.pdf`, and `build.json`.
-The source package is distributed separately from this code repository.
-The `submission/` directory in the `2026.09.17` data snapshot preserves the
-earlier manuscript; select the IEEE Access package explicitly for the current
-submission. See [manuscript build instructions](docs/REPRODUCTION.md#manuscript-build).
+The standalone `winter-manuscript-ieee-access-20260926.zip` contains the same
+manuscript package. To build it separately, use
+`python tools/reproduce.py paper --source /path/to/ieee-access-20260922`.
+See [manuscript build instructions](docs/REPRODUCTION.md#manuscript-build).
 
 ## Layout
 
@@ -99,6 +103,8 @@ submission. See [manuscript build instructions](docs/REPRODUCTION.md#manuscript-
 | `serverless-fewshot/experiments/winter_g_drift/` | Onboarding forecasts and gate shift protocol |
 | `serverless-fewshot/scripts/`, `configs/`, `testbed/` | Training, preprocessing, and testbed implementation |
 | `winter-paper/` | Table/figure generation and numerical audit code; paper/data files arrive with the DOI archive |
+| `submission/` | Current IEEE Access sources and supplied PDFs, restored from the data archive |
+| `validation/` | Checks of the packaged measurements, generated assets, and manuscript; restored from the data archive |
 | `tools/reproduce.py` | Portable release entry points |
 | `docs/` | Protocol map, data provenance, and reproduction instructions |
 

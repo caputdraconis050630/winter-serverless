@@ -8,6 +8,7 @@ torch==2.10.0
 pandas==3.0.3
 scipy==1.18.0
 scikit-learn==1.8.0
+ruptures==1.1.10
 matplotlib==3.10.8
 PyMuPDF==1.27.2
 PyYAML==6.0.3
