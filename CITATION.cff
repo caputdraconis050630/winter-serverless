@@ -2,15 +2,19 @@ cff-version: 1.2.0
 message: "Please cite the associated manuscript when using this code or data."
 title: "WINTER: Adaptive Serverless Prewarming with Limited Invocation History — reproducibility artifact"
 type: software
-version: "2026.09.17"
+version: "2026.09.26"
 license: MIT
 repository-code: "https://github.com/caputdraconis050630/winter-serverless"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21754571"
+    description: "Companion research artifact on Zenodo"
 authors:
   - family-names: Kim
     given-names: Guntak
     affiliation: "Inha University"
   - family-names: Jung
-    given-names: JaeHong
+    given-names: Jaehong
     affiliation: "Inha University"
     email: jjh1126@inha.edu
   - family-names: Kwon
@@ -29,10 +33,10 @@ preferred-citation:
     - family-names: Kim
       given-names: Guntak
     - family-names: Jung
-      given-names: JaeHong
+      given-names: Jaehong
       affiliation: "Inha University"
       email: jjh1126@inha.edu
     - family-names: Kwon
       given-names: Gu-In
   year: 2026
-  notes: "Submission manuscript prepared for Future Generation Computer Systems; no publication DOI assigned here."
+  notes: "Submission manuscript prepared for IEEE Access, source revision ieee-access-20260922. The Zenodo DOI identifies the companion research artifact."

@@ -1,10 +1,20 @@
 # Artifact scope
 
-Version `2026.09.17` contains the reviewed manuscript (`run-uugt7foz`), its
-reported measurements and the code/data needed to inspect and reproduce them.
-The measured outcomes, figures and tables are unchanged from version
-`2026.09.16.1`. This release updates the manuscript build after removal of the
-AI-assistance declaration and its separate submission files.
+Repository version `2026.09.26` supports the IEEE Access manuscript package
+`ieee-access-20260922`, supplied as a 13-page main text and an 18-page
+supplement. The main text uses the IEEE Access class and IEEE bibliography
+style. The repository metadata follows that manuscript's title, author names,
+and journal. The manuscript package
+includes its AI-assistance acknowledgment.
+
+The experiment code and measured outcomes retain the `2026.09.17` snapshot.
+All ten figure PDFs, twenty generated table fragments, and the bibliography in
+the IEEE Access package match that snapshot. The companion research artifact
+is identified by [Zenodo DOI 10.5281/zenodo.21754571](https://doi.org/10.5281/zenodo.21754571).
+The archived `submission/` tree preserves the earlier manuscript build;
+use the complete IEEE Access package with `paper --source` to build the current
+submission. The code repository contains the build entry point and instructions;
+manuscript assets and experimental data are distributed separately.
 
 | Included component | Role |
 |---|---|
@@ -14,8 +24,9 @@ AI-assistance declaration and its separate submission files.
 | Onboarding-attribution cohorts, models and source ledgers | Source of shared cohorts, prototypes, representation controls and reused outcomes |
 | Selected `results/runs/` records | Shared fixed inputs, source policy schedules, Chronos forecasts, prior alpha selection and latency calibration |
 | Source preprocessing/training code, selected checkpoints and processed Azure-2021 data | Reconstructing the learned predictors and selected inputs |
-| Current paper sources and evidence inputs | Ten referenced figures and twenty referenced generated table fragments |
-| `submission/` | Flat Elsevier source files, reviewed PDFs and submission support documents |
+| Archived paper sources and evidence inputs | Ten referenced figures and twenty referenced generated table fragments |
+| `submission/` in the `2026.09.17` data archive | Preserved manuscript sources, reviewed PDFs and submission support documents from that snapshot |
+| `ieee-access-20260922/` source package | Current IEEE Access manuscript, supplement, author images, class/font assets and `build.py`; supplied to `paper --source` |
 | `provenance/` | Twelve original metadata files and the exact six-case description correction ledger |
 
 Separate R30–R33 campaigns, the onboarding-symmetric study, unreferenced paper

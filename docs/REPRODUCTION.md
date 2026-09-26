@@ -14,16 +14,42 @@ point sets these defaults when they are absent.
 | `python tools/reproduce.py checksums --data` | Verify every restored code/data file against the release manifests |
 | `python tools/reproduce.py verify` | Verify all 19 final cohort/action sets and every included generated table |
 | `python tools/reproduce.py verify --statistics` | Also reaggregate outcomes, recompute 3,666 paired contrasts and their cluster intervals, and check control/live/timing records |
-| `python tools/reproduce.py paper` | Compile the restored flat sources into a new `.repro-output/paper-*` directory |
+| `python tools/reproduce.py paper --source /path/to/ieee-access-20260922` | Build the current IEEE Access main text and supplement in a new `.repro-output/paper-*` directory |
 | `python tools/reproduce.py figures` | Regenerate current figures/tables in a new copy of the paper directory |
 | `python tools/reproduce.py replay --case initial_azure_primary --workers 4 --output /path/to/new-replay` | Execute the complete fixed policy arrays on regenerated common request streams, writing new results |
 
-The last six commands require the matching DOI data archive. The document
-build additionally requires `pdflatex`, `bibtex`, and the standard packages of
-TeX Live. The included journal class and bibliography styles retain their own
-licenses. Builds may paginate differently with a different TeX installation;
-the frozen submission PDFs and packaging validation record identify the
-reviewed output.
+`checksums --data`, `verify`, `verify --statistics`, `figures`, and `replay`
+require the companion data archive from
+[Zenodo](https://doi.org/10.5281/zenodo.21754571). The `2026.09.17` experimental
+snapshot remains compatible with repository version `2026.09.26`.
+The manuscript build requires the separate source package, Python 3,
+`pdflatex`, `bibtex`, and the standard packages of TeX Live. Its journal class,
+bibliography style, fonts, and logos retain their own licenses.
+
+## Manuscript build
+
+The current submission source is the complete `ieee-access-20260922` package.
+Keep `authors/`, the figures, generated tables, class/style files, font files
+(`.pfb`, `.tfm`, `.map`, `.fd`), and `build.py` together. Run:
+
+```bash
+python tools/reproduce.py paper --source /path/to/ieee-access-20260922
+```
+
+The entry point copies the package to a fresh `.repro-output/paper-*` directory
+and runs its `build.py` there. The build refreshes main/supplement cross-references
+and checks the LaTeX logs before returning the two PDFs. It writes `build.json`
+with the source hashes, journal format, page counts, and PDF hashes. The input
+package is left intact. The supplied PDFs have 13 and 18 pages respectively;
+pagination can vary with the TeX installation. The local validation on
+2026-09-26 produced 13 and 17 pages, with no unresolved references, citations,
+or missing-character errors.
+
+The original `2026.09.17` data archive contains the earlier manuscript under
+`submission/`. `python tools/reproduce.py paper` still builds those restored
+sources, including their archived highlights, for reproducibility. The build
+report identifies that format as `archived-cas`. To build the current IEEE
+Access submission, pass the current source package using `--source`.
 
 ## Data layout
 

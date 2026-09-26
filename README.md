@@ -2,7 +2,10 @@
 
 Code for **WINTER: Adaptive Serverless Prewarming with Limited Invocation History**.
 
-Guntak Kim, Jung JaeHong, and Gu-In Kwon, Inha University.
+Guntak Kim, Jaehong Jung, and Gu-In Kwon, Inha University.
+
+Manuscript prepared for **IEEE Access**, source revision
+`ieee-access-20260922`.
 
 WINTER combines a source-trained temporal convolutional representation,
 prototype initialization, and local ridge adaptation. WINTER-G selects
@@ -10,16 +13,19 @@ prototype, adapted, or exponentially weighted moving average predictions using
 observed age and invocation count. Operational comparisons use the same
 provisioning controller with and without the gate.
 
-This repository contains **code and documentation**. Measured results,
-checkpoints, trace-derived arrays, figures, and the submission documents are
-distributed in the companion data archive. The manuscript's archive identifier
-is [10.5281/zenodo.21754571](https://doi.org/10.5281/zenodo.21754571).
-The DOI files are prepared separately for publication after final confirmation.
+This repository contains **code and documentation**. The companion archive for
+measured results, checkpoints, trace-derived arrays, figures, and archived
+submission documents is on **Zenodo**:
+[10.5281/zenodo.21754571](https://doi.org/10.5281/zenodo.21754571).
+This DOI identifies the research artifact; the IEEE Access manuscript is a
+submission manuscript.
 
 ## Version and experiment scope
 
-Release version: **2026.09.17**, corresponding to reviewed manuscript build
-`run-uugt7foz`.
+Repository version: **2026.09.26**, aligned with the IEEE Access manuscript
+package `ieee-access-20260922` (main text: 13 pages; supplement: 18 pages).
+The experimental snapshot remains **2026.09.17**. The journal-format and
+documentation update retains the measured results and experiment code.
 
 The new-observation EWMA weight is fixed at **α = 0.3** in every evaluated
 component. The current campaign covers three initial cohorts, one continuous
@@ -48,9 +54,11 @@ Additional preprocessing and training dependencies are declared in
 
 ## Restore the companion data
 
-The code ZIP and data TAR.GZ both contain a top-level `winter-serverless/`
-directory. Extract them into the same parent directory, or extract the data
-archive next to an existing clone named `winter-serverless`.
+Obtain the companion data TAR.GZ from the
+[Zenodo record](https://doi.org/10.5281/zenodo.21754571). The `2026.09.17`
+experimental snapshot is compatible with this repository version. Its archive
+contains a top-level `winter-serverless/` directory; extract it next to an
+existing clone named `winter-serverless`.
 
 ```bash
 # Run from the directory containing the repository.
@@ -58,13 +66,27 @@ tar -xzf winter-data-20260917.tar.gz
 cd winter-serverless
 python tools/reproduce.py checksums --data
 python tools/reproduce.py verify --statistics
-python tools/reproduce.py paper
 ```
 
 Verification recomputes reported statistics from saved measurements; it does
-not rerun all simulations. The `paper` command builds the frozen flat sources
-in a new output directory. Further commands regenerate figures or perform a
+not rerun all simulations. Further commands regenerate figures or perform a
 fresh replay into a new directory. See [reproduction instructions](docs/REPRODUCTION.md).
+
+## Build the IEEE Access manuscript
+
+Use the complete `ieee-access-20260922` source package, including `authors/`,
+the class and font files, figures, and `build.py`:
+
+```bash
+python tools/reproduce.py paper --source /path/to/ieee-access-20260922
+```
+
+The command builds a copy under `.repro-output/paper-*`, refreshes cross-document
+references, and produces `main.pdf`, `supplementary.pdf`, and `build.json`.
+The source package is distributed separately from this code repository.
+The `submission/` directory in the `2026.09.17` data snapshot preserves the
+earlier manuscript; select the IEEE Access package explicitly for the current
+submission. See [manuscript build instructions](docs/REPRODUCTION.md#manuscript-build).
 
 ## Layout
 
@@ -90,7 +112,9 @@ and paper assets are excluded. See [release scope](docs/SCOPE.md).
 ## Citation and licenses
 
 Use [CITATION.cff](CITATION.cff) for the manuscript and authors. The manuscript
-is prepared for submission to *Future Generation Computer Systems*.
+is prepared for submission to *IEEE Access*. Cite the
+[Zenodo DOI](https://doi.org/10.5281/zenodo.21754571) when referring to the
+archived research artifact.
 
 Author-written code uses the existing [MIT license](LICENSE). Measurements and
 generated assets in the DOI package use [LICENSE-DATA](LICENSE-DATA).

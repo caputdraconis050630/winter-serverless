@@ -127,32 +127,86 @@ def verify(statistics=False):
     print('Report:', destination / 'verification.json', flush=True)
 
 
-def build_paper():
-    source = ROOT / 'submission'
+def build_paper(source=None):
+    source = (source if source is not None else ROOT / 'submission').resolve()
     if not (source / 'main.tex').is_file():
-        raise SystemExit('Restore the DOI data archive to obtain the frozen flat paper sources.')
+        raise SystemExit('Provide the complete IEEE Access package with paper --source /path/to/ieee-access-20260922. See docs/REPRODUCTION.md.')
+    main_text = (source / 'main.tex').read_text()
+    document_class = re.search(r'^\s*\\documentclass(?:\[[^\]]*\])?\{([^}]+)\}', main_text, re.MULTILINE)
+    if document_class is None:
+        raise SystemExit('No document class found in ' + str(source / 'main.tex'))
+    access = document_class.group(1) == 'ieeeaccess'
+    if not access and not document_class.group(1).startswith('cas-'):
+        raise SystemExit('Unsupported manuscript class: ' + document_class.group(1))
+    required = ['supplementary.tex'] + (['build.py', 'ieeeaccess.cls', 'IEEEtran.cls', 'IEEEtran.bst'] if access else [])
+    missing = [name for name in required if not (source / name).is_file()]
+    if missing:
+        raise SystemExit('Incomplete manuscript package; missing: ' + ', '.join(missing))
+
+    # Preserve nested author images and local font assets in the isolated build.
+    suffixes = {'.tex', '.bib', '.bst', '.bbl', '.cls', '.sty', '.pdf',
+                '.png', '.jpg', '.jpeg', '.pfb', '.tfm', '.map', '.fd'}
+    excluded_dirs = {'.git', '.build', '.repro-output', '__pycache__'}
+    outputs = {'main.pdf', 'supplementary.pdf', 'highlights.pdf'}
+    sources = {}
+    for path in source.rglob('*'):
+        relative = path.relative_to(source)
+        if any(part in excluded_dirs for part in relative.parts) or not path.is_file():
+            continue
+        if path.name not in outputs and (path.suffix.lower() in suffixes or path.name == 'build.py'):
+            sources[relative] = sha(path)
     destination = output_directory('paper')
-    figures = {r.split(',')[2] for r in (source / 'figure-map.csv').read_text().splitlines()[1:]}
-    for path in source.iterdir():
-        if path.suffix in {'.tex', '.bib', '.bst', '.bbl', '.cls', '.sty', '.jpeg'} or path.name in figures:
-            shutil.copy2(path, destination / path.name)
-    commands = [['pdflatex', '-interaction=nonstopmode', '-halt-on-error', 'main.tex'], ['bibtex', 'main']]
-    for name, count in [('main', 2), ('supplementary', 3), ('highlights', 1)]:
-        commands += [['pdflatex', '-interaction=nonstopmode', '-halt-on-error', name + '.tex']] * count
+    for relative, digest in sources.items():
+        target = destination / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source / relative, target)
+        if sha(target) != digest:
+            raise SystemExit('Source changed while staging: ' + str(relative))
+
+    if access:
+        commands = [[sys.executable, 'build.py']]
+        documents = ['main', 'supplementary']
+        log_directory = destination / '.build'
+    else:
+        commands = [['pdflatex', '-interaction=nonstopmode', '-halt-on-error', 'main.tex'], ['bibtex', 'main']]
+        documents = ['main', 'supplementary']
+        if (destination / 'highlights.tex').is_file():
+            documents.append('highlights')
+        for name in documents:
+            count = {'main': 2, 'supplementary': 3, 'highlights': 1}[name]
+            commands += [['pdflatex', '-interaction=nonstopmode', '-halt-on-error', name + '.tex']] * count
+        log_directory = destination
     env = dict(os.environ, TEXINPUTS=str(destination) + os.pathsep,
                BIBINPUTS=str(destination) + os.pathsep, BSTINPUTS=str(destination) + os.pathsep)
+    # pdfTeX also resolves local metrics, Type 1 fonts and font maps separately.
+    for key in ('TFMFONTS', 'T1FONTS', 'TEXFONTMAPS'):
+        env[key] = str(destination) + os.pathsep + env.get(key, '')
     for index, command in enumerate(commands):
+        print('Building:', ' '.join(command), flush=True)
         run = subprocess.run(command, cwd=destination, env=env, stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT, text=True, errors='replace')
         (destination / f'command-{index:02d}.log').write_text(run.stdout)
         if run.returncode:
             raise SystemExit(run.stdout[-8000:])
     pages = {}
-    for name in ['main', 'supplementary', 'highlights']:
-        log = (destination / (name + '.log')).read_text(errors='replace')
-        assert not any(s in log for s in ['There were undefined references', 'multiply defined', 'Citation ']), name
-        pages[name] = int(re.search(r'Output written on .*?\((\d+) pages?', log).group(1))
-    (destination / 'build.json').write_text(json.dumps(dict(status='passed', pages=pages), indent=2) + '\n')
+    for name in documents:
+        log = (log_directory / (name + '.log')).read_text(errors='replace')
+        markers = ['There were undefined references', 'multiply defined', 'Citation ',
+                   'LaTeX Error:', 'Missing character:', 'Rerun to get cross-references right']
+        if any(marker in log for marker in markers):
+            raise SystemExit('Unresolved document issue; inspect ' + str(log_directory / (name + '.log')))
+        match = re.search(r'Output written on .*?\((\d+) pages?', log, re.DOTALL)
+        if match is None or not (destination / (name + '.pdf')).is_file():
+            raise SystemExit('Missing completed PDF: ' + name)
+        pages[name] = int(match.group(1))
+    for relative, digest in sources.items():
+        if sha(source / relative) != digest:
+            raise SystemExit('Input package changed during build: ' + str(relative))
+    report = dict(status='passed', format='ieee-access' if access else 'archived-cas',
+                  source_package=source.name, pages=pages,
+                  source_sha256={str(path): digest for path, digest in sorted(sources.items())},
+                  pdf_sha256={name + '.pdf': sha(destination / (name + '.pdf')) for name in documents})
+    (destination / 'build.json').write_text(json.dumps(report, indent=2) + '\n')
     print('Built PDFs:', destination, 'pages:', pages, flush=True)
 
 
@@ -198,14 +252,16 @@ def main():
     checks = commands.add_parser('checksums'); checks.add_argument('--data', action='store_true')
     commands.add_parser('test')
     verify_parser = commands.add_parser('verify'); verify_parser.add_argument('--statistics', action='store_true')
-    commands.add_parser('paper'); commands.add_parser('figures')
+    paper = commands.add_parser('paper')
+    paper.add_argument('--source', type=Path, help='Complete manuscript source package; defaults to restored submission/.')
+    commands.add_parser('figures')
     run = commands.add_parser('replay'); run.add_argument('--case', required=True)
     run.add_argument('--workers', type=int, default=4); run.add_argument('--output', required=True)
     args = parser.parse_args()
     if args.command == 'checksums': checksums(args.data)
     elif args.command == 'test': tests()
     elif args.command == 'verify': verify(args.statistics)
-    elif args.command == 'paper': build_paper()
+    elif args.command == 'paper': build_paper(args.source)
     elif args.command == 'figures': figures()
     elif args.command == 'replay': replay(args.case, args.workers, args.output)
 
