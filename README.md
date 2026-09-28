@@ -22,10 +22,13 @@ submission manuscript.
 
 ## Version and experiment scope
 
-Repository version: **2026.09.26**, aligned with the IEEE Access manuscript
+Repository version: **2026.09.28**, aligned with the IEEE Access manuscript
 package `ieee-access-20260922` (main text: 13 pages; supplement: 18 pages).
-The experimental snapshot remains **2026.09.17**. The `2026.09.26` artifact
-packages those measurements with the complete IEEE Access sources and PDFs.
+The experimental snapshot remains **2026.09.17**. The `2026.09.28` core data
+bundle retains the inputs and evidence needed for this manuscript, omitting
+provider datasets, full preprocessing arrays, cached representations, and
+redundant detailed simulation ledgers. The measured arrays and manuscript
+contents retain their original bytes.
 PDF author metadata identifies Guntak Kim, Jaehong Jung, and Gu-In Kwon;
 the supplied page content is preserved.
 
@@ -56,19 +59,23 @@ Additional preprocessing and training dependencies are declared in
 
 ## Restore the companion data
 
-Obtain the companion data TAR.GZ from the
-[Zenodo record](https://doi.org/10.5281/zenodo.21754571). The current files are
-`winter-code-ieee-access-20260926.zip` and
-`winter-data-ieee-access-20260926.tar.gz`. Both contain a top-level
-`winter-serverless/` directory. Extract them into the same parent directory,
-or extract the data archive next to an existing clone named `winter-serverless`.
+Obtain `winter-code-ieee-access-20260928.zip` and **all**
+`winter-data-core-ieee-access-20260928-*.tar.gz` files from the
+[Zenodo record](https://doi.org/10.5281/zenodo.21754571). Each data volume is an
+independent TAR.GZ with disjoint files under `winter-serverless/`; do not
+concatenate them. Extract the code ZIP and every data volume into the same
+parent directory. `data-bundle.json` identifies the complete volume set, and
+the record's `SHA256SUMS.txt` verifies downloaded files.
 
 ```bash
 # Run from the directory containing the repository.
-tar -xzf winter-data-ieee-access-20260926.tar.gz
+for archive in winter-data-core-ieee-access-20260928-*.tar.gz; do
+  tar -xzf "$archive"
+done
 cd winter-serverless
 python tools/reproduce.py checksums --data
 python tools/reproduce.py verify --statistics
+python tools/verify_core_evidence.py
 ```
 
 Verification recomputes reported statistics from saved measurements; it does

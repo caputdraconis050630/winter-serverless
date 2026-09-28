@@ -2,16 +2,19 @@
 
 The companion results archive is on
 [Zenodo, DOI 10.5281/zenodo.21754571](https://doi.org/10.5281/zenodo.21754571),
-separately from GitHub code. The `2026.09.26` code/data archives use the unchanged
+separately from GitHub code. The `2026.09.28` core code/data archives use the unchanged
 `2026.09.17` experimental snapshot for the IEEE Access manuscript.
 The final experimental record is `results/fixed_ewma_v1/`, with EWMA's
 new-observation weight fixed to 0.3 throughout. The other included campaigns
 provide the source-model, fixed-action, invariant-outcome, calibration, and
 control-study dependencies of that record.
 
-The archive includes fixed cohort arrays, action schedules, source checkpoints,
-per-function/per-seed ledgers, aggregate outcomes, paired statistics, live
-request records, table/figure data, and the current IEEE Access manuscript.
+The core bundle includes fixed cohort arrays, action schedules, source
+checkpoints, function-level outcomes averaged over seeds, seed-level totals,
+paired statistics, selected control-study function/seed outcomes, live request
+records, table/figure data, and the current IEEE Access manuscript.
+It omits the much larger intermediate per-minute function/seed ledgers,
+cached feature/rate matrices, and evaluations outside the reported controls.
 Its source package is `ieee-access-20260922`, restored under `submission/`; see
 [manuscript build instructions](REPRODUCTION.md#manuscript-build).
 The archive materializes workspace symlinks as ordinary files. Temporary checkpoints, caches, Python
@@ -35,16 +38,22 @@ arrays preserve the upstream CC BY 4.0 attribution requirements. Preprocessing
 selects functions and windows, transforms counts, constructs causal features,
 and assigns duration parameters as described in the manuscript and source code.
 
-Processed Azure-2021 source arrays are included. Complete processed Azure-2019
-and Huawei universes and provider-distributed raw archives are not included;
-the selected replay arrays are sufficient for the supported verification and
-fixed-policy replay commands.
+Provider-distributed datasets and complete processed training/evaluation
+universes for all three trace sources are excluded. Only source split/function
+identities, the selected final replay slices (16.4 MB), and control-study
+cohorts are retained. They fix the exact function selection, request counts,
+duration parameters and grouping used in this study; they are not a mirror of
+the external datasets. The frozen arrays support the documented verification
+and fixed-policy replay commands without a provider download.
 
 ## Manifests
 
 `MANIFEST-code.sha256` covers the code release. `MANIFEST-data.sha256` covers
 every companion payload file. `data-inventory.json` identifies the data file
 sizes, hashes and inclusion reasons without machine-specific source paths.
-Measurement-time provenance is retained. The six corrected final drift
+Historical contracts and verification reports may refer to omitted
+intermediate files or full training inputs. They record the original run;
+`MANIFEST-data.sha256` alone defines the current payload. Measurement-time
+provenance is retained. The six corrected final drift
 descriptions have an explicit original-to-release hash ledger; see
 `REPRODUCTION.md`. `docs/SCOPE.md` explains the selected artifact boundaries.

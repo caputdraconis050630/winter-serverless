@@ -24,8 +24,11 @@ no-age-hand-off control preserves the gate's prototype/low-count routes and
 removes only its mature-age switch; it is not identical to ungated WINTER.
 Both branches remain maintained in the evaluated gated implementation.
 
-Source checkpoints, shared inputs, recorded simulator versions and invariant
-measurements needed by the final campaign are retained. The final
+Source checkpoints, selected replay inputs, recorded simulator versions and
+source aggregate/contract records needed by the final campaign are retained.
+The core data bundle omits detailed intermediate ledgers and full provider
+preprocessing arrays; `docs/DATA.md` and the restored `CORE_DATA_SCOPE.md`
+describe the supported boundary. The final
 `fixed_ewma_v1/cases/*/case.json` files define the comparison arms. Some immutable
 source arrays also contain older scheduled drift and non-0.3 EWMA results;
 these are not extracted into final comparisons. Unused follow-up campaigns,

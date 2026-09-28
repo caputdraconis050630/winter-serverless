@@ -14,16 +14,21 @@ point sets these defaults when they are absent.
 | `python tools/reproduce.py checksums --data` | Verify every restored code/data file against the release manifests |
 | `python tools/reproduce.py verify` | Verify all 19 final cohort/action sets and every included generated table |
 | `python tools/reproduce.py verify --statistics` | Also reaggregate outcomes, recompute 3,666 paired contrasts and their cluster intervals, and check control/live/timing records |
+| `python tools/verify_core_evidence.py` | Recheck the three 497-candidate controller selections and the published representation-control selection and intervals from retained measurements |
 | `python tools/reproduce.py paper` | Build the restored IEEE Access main text and supplement in a new `.repro-output/paper-*` directory |
 | `python tools/reproduce.py figures` | Regenerate current figures/tables in a new copy of the paper directory |
 | `python tools/reproduce.py replay --case initial_azure_primary --workers 4 --output /path/to/new-replay` | Execute the complete fixed policy arrays on regenerated common request streams, writing new results |
 
 `checksums --data`, `verify`, `verify --statistics`, `figures`, and `replay`
 require the companion data archive from
-[Zenodo](https://doi.org/10.5281/zenodo.21754571). Use
-`winter-data-ieee-access-20260926.tar.gz` with the matching code ZIP or GitHub
-snapshot. It preserves the `2026.09.17` experimental files and supplies the
-current manuscript under `submission/`.
+[Zenodo](https://doi.org/10.5281/zenodo.21754571). Extract every
+`winter-data-core-ieee-access-20260928-*.tar.gz` beside the matching code ZIP
+or GitHub snapshot. Each volume is independently extractable; all are needed
+for the complete workspace, and they must not be concatenated. The bundle
+preserves selected `2026.09.17` experimental files and supplies the current
+manuscript under `submission/`. `CORE_DATA_SCOPE.md` and `data-inventory.json`
+describe the exact retained scope. The earlier 18.1 GB archive and its binary
+`.partNNN` chunks are superseded and are not needed.
 The manuscript build requires that restored source package, Python 3,
 `pdflatex`, `bibtex`, and the standard packages of TeX Live. Its journal class,
 bibliography style, fonts, and logos retain their own licenses.
@@ -64,12 +69,12 @@ reproduction. Its earlier document format is identified as `archived-cas` in
 The data archive restores these paths below `winter-serverless/`:
 
 ```text
-serverless-fewshot/data/processed/
+serverless-fewshot/data/processed/       # partition/identity metadata only
 serverless-fewshot/results/fixed_ewma_v1/
 serverless-fewshot/results/lstm_comparison_v1/
 serverless-fewshot/results/winter_drift_v1/
-serverless-fewshot/results/winter_g_drift_v1/
-serverless-fewshot/results/onboarding_attribution_v1/
+serverless-fewshot/results/winter_g_drift_v1/  # prototype parameters
+serverless-fewshot/results/onboarding_attribution_v1/  # selected models/provenance
 serverless-fewshot/results/runs/
 serverless-fewshot/results_azure2021/
 winter-paper/
@@ -82,10 +87,14 @@ validation/
 identifies inputs and policies; `aggregate.npz` retains weighted function-level
 and seed-level outcomes; `summary.json` contains derived metrics. The composed
 final records identify their original action-level measurement sources.
-`fixed_ewma_v1/replay/` contains changed-policy function/seed ledgers, and the
-source campaign directories retain invariant-policy and matched-WINTER ledgers.
-`fixed_ewma_v1/controls/` contains validation selection, evaluation, and
-representation controls. `strict_round/live/` contains the final live records.
+`fixed_ewma_v1/replay/` and the source campaign directories retain the original
+aggregates and contracts cited by the final action-level composition. The
+large intermediate `functions/` and `seed_functions/` files are omitted;
+fresh replay can regenerate them. Final aggregates retain function-level
+seed-averaged outcomes, seed-level totals, timelines, identities, and weights.
+`fixed_ewma_v1/controls/` retains selection evidence and raw per-function,
+per-seed outcomes for the reported main, strict-start, and representation
+comparisons. `strict_round/live/` contains the actual live records.
 
 Original JSON provenance strings and frozen execution contracts retain the
 measurement-time `/data/260715/` prefix. Their suffix after that prefix maps
@@ -97,10 +106,15 @@ their inputs relative to the repository and leave recorded results intact.
 
 Fresh replay reproduces simulation from frozen policy actions; it does not
 retrain WINTER or LSTM. Source training and trace preprocessing code are also
-included, with checkpoints, source splits and processed Azure-2021 inputs in
-the data archive. Reconstructing all cohorts from provider originals requires
-the public traces listed in `DATA.md`. Chronos model weights are obtained
-separately from their original release.
+included, with checkpoints and source partition metadata in the core data
+bundle. Provider datasets and full processed Azure-2021/2019/Huawei arrays
+are excluded. The selected final replay inputs are only 16.4 MB; these frozen
+experiment slices are necessary to run the existing replay command on exactly
+the same cohorts. Reconstructing all cohorts and training inputs from provider
+originals requires the public traces listed in `DATA.md` and adapting the
+source scripts. That complete pipeline has not been rerun or validated as a
+single portable command. Chronos model weights are obtained separately from
+their original release; measured fixed policy arrays are retained.
 
 Physical Knative timing depends on the cluster and runtime. The live scripts
 create and remove experiment services and require a configured test cluster;
