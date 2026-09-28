@@ -59,16 +59,19 @@ Additional preprocessing and training dependencies are declared in
 
 ## Restore the companion data
 
-Obtain `winter-code-ieee-access-20260928.zip` and **all**
-`winter-data-core-ieee-access-20260928-*.tar.gz` files from the
-[Zenodo record](https://doi.org/10.5281/zenodo.21754571). Each data volume is an
-independent TAR.GZ with disjoint files under `winter-serverless/`; do not
-concatenate them. Extract the code ZIP and every data volume into the same
-parent directory. `data-bundle.json` identifies the complete volume set, and
-the record's `SHA256SUMS.txt` verifies downloaded files.
+Obtain `winter-code-ieee-access-20260928.zip`, `restore-data.py`,
+`data-bundle.json`, and **all 67 data files** from the
+[Zenodo record](https://doi.org/10.5281/zenodo.21754571): two complete TAR.GZ
+volumes and 65 binary parts of at most 8 MB for the other six volumes.
+Run `python3 restore-data.py` in the download directory. It verifies every
+downloaded file, reconstructs the six split volumes, and verifies their original
+SHA-256 hashes. The resulting eight TAR.GZ volumes contain disjoint files under
+`winter-serverless/`; extract each one, without concatenating complete volumes.
+`SHA256SUMS.txt` verifies the full set of distributed files.
 
 ```bash
 # Run from the directory containing the repository.
+python3 restore-data.py
 for archive in winter-data-core-ieee-access-20260928-*.tar.gz; do
   tar -xzf "$archive"
 done

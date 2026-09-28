@@ -52,7 +52,10 @@ cached representations and rate matrices, and intermediate per-minute
 function/seed ledgers are excluded from the core bundle. Chronos model weights
 must be obtained from their upstream source for a full rebuild. Frozen inputs
 support the documented verification and policy replay without those downloads.
-The reduced archive is distributed in independent TAR.GZ volumes below 100 MB
-each. It supersedes the earlier 18.1 GB data archive and its binary parts.
+The reduced archive consists of eight independent TAR.GZ volumes below 100 MB
+each. Two are distributed whole; six are delivered as 65 binary transport parts
+of at most 8 MB. The supplied `restore-data.py` verifies all parts and restores
+the eight original volume hashes before extraction. This core bundle supersedes
+the earlier 18.1 GB data archive and its 1 GB binary parts.
 See `CORE_DATA_SCOPE.md` in the restored data for the precise evidence boundary;
 historical provenance references are not a promise to include every old file.

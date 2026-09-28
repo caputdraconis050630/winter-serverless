@@ -21,7 +21,12 @@ point sets these defaults when they are absent.
 
 `checksums --data`, `verify`, `verify --statistics`, `figures`, and `replay`
 require the companion data archive from
-[Zenodo](https://doi.org/10.5281/zenodo.21754571). Extract every
+[Zenodo](https://doi.org/10.5281/zenodo.21754571). First download all 67 data
+files, `data-bundle.json` and `restore-data.py`, and run `python3 restore-data.py`
+in the download directory. Two volumes are supplied whole; six are transported
+as 65 binary parts of at most 8 MB. The helper verifies the input parts and
+reconstructed volume hashes using only the Python standard library.
+Then extract every
 `winter-data-core-ieee-access-20260928-*.tar.gz` beside the matching code ZIP
 or GitHub snapshot. Each volume is independently extractable; all are needed
 for the complete workspace, and they must not be concatenated. The bundle
